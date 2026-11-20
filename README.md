@@ -16,9 +16,9 @@ List browser demo, and the Vietnamese article that documents the experiment.
 
 ## What was tested
 
-The same Skill payload is installed in the canonical directory,
-`.claude/skills/`, and `.agents/skills/`. Claude Code and Codex received the
-same fixtures and prompts for requirement definition and code review.
+The same Skill content is installed in the source directory, `.claude/skills/`,
+and `.agents/skills/`. Claude Code and Codex received the same fixtures and
+prompts for requirement definition and code review.
 
 The recorded Shared Todo List evaluation scored 8/8 on each platform. The
 separate `code-review-v2` evaluation scored 6/6 on each platform. These are

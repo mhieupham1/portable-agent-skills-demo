@@ -12,7 +12,12 @@ directory, `.claude/skills/requirements-and-review/`, and
 `.agents/skills/requirements-and-review/`. The runner verified that the three
 copies are byte-identical before calling either CLI.
 
-Both platforms received the same prompt for each task and ran read-only:
+Both platforms received the same prompt for each task. The requirement prompt
+says “Do not implement anything”; the review prompt says “Do not modify files.”
+Codex was invoked with `--sandbox read-only`; Claude was invoked with
+`--permission-mode dontAsk --permission-prompts none`, which suppresses
+permission prompts but does not establish equivalent filesystem read-only
+enforcement.
 
 1. Requirement definition for the intentionally incomplete Shared Todo List
    request in [`fixtures/requirements-request.md`](../../fixtures/requirements-request.md).

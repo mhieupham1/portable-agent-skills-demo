@@ -26,12 +26,20 @@ Toàn bộ artifact, source code, fixture, transcript và media của bài có t
 Bài viết trả lời ba câu hỏi cụ thể:
 
 - Một `SKILL.md` chỉ dùng phần chuẩn có chạy được trên cả Claude Code và Codex không?
-- Procedure cho requirement definition và code review có tái sử dụng được không?
+- Quy trình cho requirement definition và code review có tái sử dụng được không?
 - Chuẩn hóa này hữu ích thế nào trong công việc hằng ngày, và giới hạn của nó là gì?
+
+## Kết luận nhanh
+
+**Có, trong phạm vi thử nghiệm này.** Cùng một `SKILL.md` dùng frontmatter
+chuẩn đã được Claude Code và Codex thực thi cho hai tác vụ: requirement definition
+và code review. Cả hai đạt 8/8 theo rubric đã công bố. Điều đó chứng minh quy
+trình có thể tái sử dụng trên case nhỏ đã kiểm tra; nó không chứng minh hai model
+có chất lượng, chi phí hay tốc độ tương đương.
 
 ## Thí nghiệm: một workflow, hai nhiệm vụ
 
-Artifact gốc là [file `SKILL.md` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
+Skill gốc là [file `SKILL.md` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
 Nó dùng **chỉ** hai trường chuẩn `name` và `description`, không dùng
 frontmatter riêng của Claude Code hoặc Codex. Skill có hai mode:
 
@@ -40,56 +48,52 @@ frontmatter riêng của Claude Code hoặc Codex. Skill có hai mode:
 - **Code review**: chỉ nêu lỗi có bằng chứng, bắt buộc priority, file:line,
   failure scenario và review coverage.
 
-![Hình 1 — Portable core của requirements-and-review](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/01-portable-core.png)
+![Hình 1 — Phần dùng chung của requirements-and-review](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/01-portable-core.png)
 
-*Hình 1 — Portable core của `requirements-and-review`. Cùng workflow được đặt
-tại các thư mục Skill của Codex, Claude Code và bản canonical; `SKILL.md` chỉ
+*Hình 1 — Phần dùng chung của `requirements-and-review`. Cùng workflow được đặt
+tại các thư mục Skill của Codex, Claude Code và bản gốc; `SKILL.md` chỉ
 dùng frontmatter chuẩn `name` và `description`, rồi định nghĩa hai mode
 requirement definition và code review.*
 
-Do vị trí cài đặt mỗi CLI khác nhau, cùng payload được đặt ở
+Do vị trí cài đặt mỗi CLI khác nhau, cùng nội dung Skill được đặt ở
 `.claude/skills/requirements-and-review/` cho Claude Code và
 `.agents/skills/requirements-and-review/` cho Codex. Ba file có cùng SHA-256:
 `f0ec6011fdcd0a160e3420902e0902fd4bcd44b56331e628874ea01251f1648e`.
+Có thể đối chiếu trực tiếp [bản gốc](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md),
+[bản Claude Code](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/.claude/skills/requirements-and-review/SKILL.md)
+và [bản Codex](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/.agents/skills/requirements-and-review/SKILL.md).
 
 Từ setup này có hai điểm cần phân biệt:
 
-- **Portable** là nội dung Skill: cùng frontmatter, hướng dẫn và output contract.
-- **Adapter** chỉ là đường dẫn cài đặt native của từng CLI.
+- **Phần dùng chung** là nội dung Skill: cùng frontmatter, hướng dẫn và quy ước
+  cấu trúc đầu ra.
+- **Phần riêng của từng CLI** chỉ là đường dẫn cài đặt.
+
+```text
+SKILL.md dùng chung
+├── .claude/skills/requirements-and-review/  → Claude Code
+└── .agents/skills/requirements-and-review/  → Codex
+                         ↓
+              cùng prompt + fixture + rubric
+                         ↓
+                  hai transcript để đối chiếu
+```
 
 ## Tình huống demo: Shared Todo List
 
-Để thí nghiệm có một bối cảnh sản phẩm nhìn thấy được, repository kèm một web
-demo local để các thành viên workspace tạo task, giao cho một người, đánh dấu
-hoàn thành và lọc `All / Active / Done`. Đây là tương tác chạy thật trong trình
-duyệt, nhưng **không** có backend, login, persistence hay dữ liệu thật; giao
-diện tự ghi rõ đó là local demo.
-
-Phạm vi của demo được giữ cố ý nhỏ:
-
-- Có: tạo task, chọn assignee, chọn due date, đánh dấu hoàn thành và lọc task.
-- Không có: backend, login, persistence hay dữ liệu thật.
-- Vai trò: tạo một ngữ cảnh sản phẩm cụ thể cho hai procedure được kiểm tra; không
-  phải benchmark chất lượng model.
-
-Mã nguồn web demo có tại [GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo):
-
-- [`index.html` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/index.html): cấu trúc trang và accessibility contract.
-- [`app.js` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/app.js): điều khiển form, filter và thao tác hoàn thành task.
-- [`task-list.mjs` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/task-list.mjs): lifecycle task và filter thuần.
-- [Tests trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo/tests): kiểm thử lifecycle cùng page contract.
-
-Web này là **artifact minh họa**, không phải bằng chứng một model giỏi hơn hay
-thay cho evaluation. Nó cho người đọc cùng ngữ cảnh sản phẩm với hai procedure
-được kiểm tra ở dưới.
+Repository kèm một web demo local: thành viên workspace tạo task, giao task,
+đánh dấu hoàn thành và lọc `All / Active / Done`. Nó chỉ cung cấp bối cảnh sản
+phẩm chung cho tình huống kiểm thử: Skill không tạo web này và web không được dùng để chấm
+kết quả. Demo không có backend, login, persistence hay dữ liệu thật. [Xem source
+demo trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo).
 
 ![Hình 2 — Shared Todo List local demo](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/02-shared-todo.png)
 
 *Hình 2 — Shared Todo List chạy local. Ảnh cho thấy form tạo task, bộ lọc
 `All / Active / Done`, task đã hoàn thành và số lượng task còn active.*
 
-Tôi dùng cùng prompt tương ứng, cùng fixture và rubric cho cả hai agent. Bài
-requirement dùng [fixture Shared Todo List trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/fixtures/requirements-request.md)
+Tôi dùng cùng prompt tương ứng, cùng tình huống kiểm thử (fixture) và cùng
+rubric (bảng tiêu chí chấm) cho cả hai agent. Bài requirement dùng [fixture Shared Todo List trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/fixtures/requirements-request.md)
 trong cùng bối cảnh Shared Todo List: thành viên workspace tạo task, giao task
 và đánh dấu hoàn thành. Quyền sửa/xóa task của người khác, deadline/timezone,
 recurring task, retention/reopen, thông báo và concurrent edit đều cố ý để
@@ -113,28 +117,53 @@ edit vẫn cố ý để trống.*
 
 Rubric không đòi văn phong giống nhau. Nó chỉ hỏi những thứ quan sát được: brief
 có scope/câu hỏi/assumption/acceptance criteria không; review có nhận ra lỗi,
-priority, `file:line` và phạm vi đã kiểm tra không. Toàn bộ fixture, rubric và
-transcript có trong [báo cáo kiểm thử](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/eval-2026-11-21-shared-todo/RESULTS.md).
+priority, `file:line` và phạm vi đã kiểm tra không. Có thể xem trực tiếp
+[runner](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/tests/run-cross-platform-eval.sh),
+[rubric](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/tests/rubric.md)
+và [báo cáo kiểm thử](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/eval-2026-11-21-shared-todo/RESULTS.md).
 
-Để phép thử công bằng, cả hai CLI cùng nhận:
+Để phép thử có thể kiểm tra lại, cả hai CLI cùng nhận các prompt sau:
 
-- Cùng Skill payload và cùng prompt theo từng tác vụ.
-- Cùng fixture và rubric chấm theo điều kiện quan sát được.
-- Chế độ chỉ đọc; không được sửa file fixture hay code demo.
+**Requirement definition**
+
+```text
+Use the requirements-and-review skill in requirement-definition mode.
+Read fixtures/requirements-request.md.
+Do not implement anything; produce the requested brief.
+```
+
+**Code review**
+
+```text
+Use the requirements-and-review skill in code-review mode.
+Review fixtures/review/src/task-service.js and its test.
+Do not modify files; produce only the review.
+```
+
+Hai lần chạy cũng dùng cùng fixture và rubric. Về quyền ghi file, bằng chứng
+cần được nói chính xác:
+
+- Prompt requirement yêu cầu không triển khai gì; prompt review yêu cầu không
+  sửa file.
+- Codex được chạy với `--sandbox read-only`.
+- Claude Code được chạy với `--permission-mode dontAsk --permission-prompts none`.
+  Các tuỳ chọn này không chứng minh một sandbox chỉ đọc, nên thử nghiệm chỉ
+  khẳng định yêu cầu không triển khai hoặc không sửa file ở cấp prompt cho
+  Claude Code, tùy theo tác vụ.
 
 ### Demo requirement definition trên hai CLI
 
 Cả Claude Code lẫn Codex nhận cùng prompt, đọc cùng
-`fixtures/requirements-request.md` và không được phép sửa file. Mục tiêu ở đây
-không phải để hai câu trả lời giống chữ nhau, mà để kiểm tra cả hai có thực hiện
-cùng output contract của Skill hay không.
+`fixtures/requirements-request.md` và được yêu cầu chỉ tạo brief, không triển
+khai tính năng. Mục tiêu ở đây không phải để hai câu trả lời giống chữ nhau, mà
+để kiểm tra cả hai có thực hiện cùng quy ước cấu trúc đầu ra của Skill hay không.
 
 #### Claude Code
 
 ![Hình 4a — Claude Code chạy requirement definition](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04a-claude-requirements.png)
 
 *Hình 4a — Claude Code nạp `requirements-and-review`, đọc fixture và tạo brief
-Shared Todo List theo output contract. [Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04a-claude-requirements.mp4),
+Shared Todo List theo cấu trúc đầu ra đã định nghĩa. [Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04a-claude-requirements.mp4),
 vì output cần cuộn mới xem hết.*
 
 #### Codex
@@ -169,12 +198,13 @@ test và review coverage.*
 tra workspace membership, nên request bị từ chối vẫn có thể để lại thay đổi
 trong object. Output cũng công bố review coverage và testing gap.*
 
-## Demo thứ hai: một Skill review có cấu trúc
+## Kiểm tra mở rộng: một Skill review có cấu trúc
 
-Skill đầu tiên chỉ có 64 dòng nên phù hợp để kiểm tra portable core, nhưng chưa
+Skill đầu tiên chỉ có 64 dòng nên phù hợp để kiểm tra phần dùng chung, nhưng chưa
 đủ để minh họa một workflow review đầy đủ hơn. Vì thế repository có thêm
 [source `code-review-v2` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/agent-skills/code-review-v2): một Skill gồm
-167 dòng hướng dẫn và hai reference đi kèm.
+167 dòng hướng dẫn và hai reference đi kèm. Đây là kiểm tra bổ sung, **không**
+được tính vào kết quả 8/8 của phần dùng chung ở phần trên.
 
 Gói này cho thấy một Skill không chỉ là một prompt ngắn. Nó làm ba việc:
 
@@ -191,14 +221,14 @@ Các giả định chỉ phù hợp với một repository đã được tổng 
 ưu tiên file/diff người dùng chỉ định; và luôn công bố review coverage.
 
 Trong fixture authorization-order bug, hai lần chạy ghi lại đều đạt **6/6**
-theo rubric: review envelope, severity structure, file/line, nhận ra mutation
-trước workspace authorization, impact và scope disclosure. [Báo cáo port/eval](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/code-review-v2-eval-2026-11-21-shared-todo/RESULTS.md)
+theo rubric: khung review, cấu trúc severity, file/line, nhận ra mutation
+trước workspace authorization, impact và phạm vi kiểm tra đã công bố. [Báo cáo port/eval](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/code-review-v2-eval-2026-11-21-shared-todo/RESULTS.md)
 cung cấp transcript, rubric và cách chạy lại.
 
 ### Demo `code-review-v2` trên Claude Code và Codex
 
-Lần này cả hai CLI nhận cùng prompt review và cùng fixture, nhưng output
-contract đòi thêm severity structure, `Summary` và `Review coverage`.
+Lần này cả hai CLI nhận cùng prompt review và cùng fixture, nhưng quy ước đầu ra
+đòi thêm cấu trúc severity, `Summary` và `Review coverage`.
 
 #### Claude Code
 
@@ -218,8 +248,8 @@ Medium/Low, finding ở `task-service.js:6`, `Summary` và `Review coverage`.
 vì phần review dài cần cuộn.*
 
 Đây là một lượt chạy có gọi Skill tường minh trên mỗi CLI, nên không phải bằng
-chứng Skill “làm model thông minh hơn”. Nó chỉ cho thấy khi Skill được gọi, cả
-hai platform đã thực thi cùng output contract trên case nhỏ này.
+chứng Skill “làm model thông minh hơn”. Nó chỉ bổ sung bằng chứng rằng khi Skill
+được gọi, cả hai platform có thể thực thi cùng quy ước đầu ra trên case nhỏ này.
 
 ### Môi trường chạy
 
@@ -231,14 +261,13 @@ Việt Nam); để kết quả có thể đối chiếu, hai platform dùng mode
 | Claude Code | 2.1.329 | `claude-sonnet-5-5` |
 | Codex | 0.171.0 | `gpt-5.6-terra` |
 
-Mỗi platform nhận cùng prompt, cùng fixture và chạy ở chế độ chỉ đọc. Đây không
-phải phép so sánh năng lực tuyệt đối giữa hai model: chỉ một lần chạy mỗi tác vụ
-không đủ để kết luận về độ ổn định, chi phí hay độ chính xác trên codebase thật.
+Hai platform nhận cùng prompt và fixture. Codex có sandbox chỉ đọc; phía Claude
+Code chỉ có ràng buộc không sửa file trong prompt, không có bằng chứng về sandbox
+chỉ đọc tương đương. Vì vậy đây không phải phép so sánh năng lực tuyệt đối giữa
+hai model: một lần chạy mỗi tác vụ không đủ để kết luận về độ ổn định, chi phí
+hay độ chính xác trên codebase thật.
 
-Vì vậy, kết quả dưới đây chỉ chứng minh **khả năng tái sử dụng procedure trên
-case đã kiểm tra**, không chứng minh hai model có năng lực tương đương.
-
-## Kết quả cho portable core: procedure tái dùng được; kết quả không tự động đồng nhất
+## Kết quả cho phần dùng chung: quy trình tái dùng được; kết quả không tự động đồng nhất
 
 | Nền tảng | Requirement definition | Code review | Kết quả |
 | --- | ---: | ---: | --- |
@@ -253,10 +282,10 @@ Kết quả quan sát được:
   workspace vẫn có thể làm đổi object trước khi code ném `forbidden`.
 - **Claude Code** tạo đủ brief yêu cầu, tìm đúng mutation trước workspace
   authorization tại dòng 6, đồng thời nêu validation và test coverage còn thiếu.
-- **Kết luận**: cùng artifact và procedure đã chạy thành công trên cả Claude
+- **Kết luận**: cùng Skill và quy trình đã chạy thành công trên cả Claude
   Code lẫn Codex trong hai tác vụ đã kiểm tra. Đây vẫn chỉ là smoke evaluation
   một lần mỗi tác vụ, không phải bằng chứng rằng hai model luôn có chất lượng,
-  tốc độ hay tool behavior giống nhau.
+  tốc độ hay hành vi công cụ giống nhau.
 
 ## Tôi nghĩ gì về chuẩn hóa Agent Skills?
 
@@ -267,12 +296,12 @@ Quan điểm của tôi là:
   để mang quy trình sang công cụ khác mà không bắt mọi vendor dùng cùng UX hay
   tool API. Việc Anthropic chuyển giao Agent Skills cho Agentic AI Foundation là
   tín hiệu tích cực cho hướng vendor-neutral này. [Thông báo của Anthropic](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation)
-- Không nên nhét execution policy vào portable core. Ví dụ,
+- Không nên nhét chính sách thực thi vào phần dùng chung. Ví dụ,
   `disable-model-invocation`, dynamic context hay cấu hình subagent là extension
   hữu ích của một platform nhưng dễ làm Skill kém di động.
-- Một Skill dùng chung nên giữ body trung lập: outcome, bằng chứng cần xem,
+- Một Skill dùng chung nên giữ hướng dẫn trung lập: outcome, bằng chứng cần xem,
   điều kiện dừng và format đầu ra. Phần phụ thuộc CLI, quyền, hook hoặc model
-  nên ở adapter của từng nền tảng hay tài liệu triển khai riêng.
+  nên ở phần cài đặt riêng của từng nền tảng hay tài liệu triển khai riêng.
 
 Nói ngắn gọn: standardization nên làm cho **quy trình** di chuyển được, không
 hứa hẹn **chất lượng quyết định** của các agent sẽ bằng nhau.
@@ -291,8 +320,8 @@ Cách tôi áp dụng hằng ngày:
 2. **Khi review**: buộc output có priority, `file:line` và failure scenario,
    thay cho nhận xét “có vẻ không ổn”. Tác giả có thể tái hiện rồi quyết định
    sửa nhanh hơn.
-3. **Khi duy trì Skill**: lưu portable core cùng repository, cài cùng payload
-   vào thư mục native của agent đang dùng và giữ một fixture/rubric nhỏ trước
+3. **Khi duy trì Skill**: lưu phần dùng chung cùng repository, cài cùng nội dung
+   vào thư mục riêng của agent đang dùng và giữ một fixture/rubric nhỏ trước
    mỗi thay đổi lớn.
 4. **Khi đổi công cụ**: mang theo procedure, acceptance contract và eval từ
    Codex sang Claude Code hoặc Copilot; không giả định agent khác sẽ tự cho ra
