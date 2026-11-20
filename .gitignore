@@ -10,6 +10,7 @@ reports/claude-*.stdout
 reports/claude-*.stderr
 reports/*-repro.*
 reports/codex-repro.md
+reports/latest
 
 # Superseded Data Export evaluation; the article links to the current Todo List run.
 reports/eval-2026-11-20/

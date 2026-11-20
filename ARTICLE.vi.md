@@ -20,10 +20,13 @@ cũng hỗ trợ project skills ở `.github/skills`, `.claude/skills` và
 Tôi đã kiểm chứng nhận định đó bằng một Skill thật, không chỉ chuyển đổi
 frontmatter trên giấy.
 
+Toàn bộ artifact, source code, fixture, transcript và media của bài có tại
+[repository GitHub public](https://github.com/mhieupham1/portable-agent-skills-demo).
+
 ## Thí nghiệm: một workflow, hai nhiệm vụ
 
 Artifact gốc nằm tại
-[`agent-skills/requirements-and-review/SKILL.md`](agent-skills/requirements-and-review/SKILL.md).
+[`agent-skills/requirements-and-review/SKILL.md`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
 Nó dùng **chỉ** hai trường chuẩn `name` và `description`, không dùng
 frontmatter riêng của Claude Code hoặc Codex. Skill có hai mode:
 
@@ -32,7 +35,7 @@ frontmatter riêng của Claude Code hoặc Codex. Skill có hai mode:
 - **Code review**: chỉ nêu lỗi có bằng chứng, bắt buộc priority, file:line,
   failure scenario và review coverage.
 
-![Hình 1 — Portable core của requirements-and-review](assets/article/01-portable-core.png)
+![Hình 1 — Portable core của requirements-and-review](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/01-portable-core.png)
 
 *Hình 1 — Portable core của `requirements-and-review`. Cùng workflow được đặt
 tại các thư mục Skill của Codex, Claude Code và bản canonical; `SKILL.md` chỉ
@@ -54,24 +57,24 @@ duyệt, nhưng **không** có backend, login, persistence hay dữ liệu thậ
 diện tự ghi rõ đó là local demo.
 
 Mã nguồn của web demo nằm tại
-[`demo/shared-todo/`](demo/shared-todo/):
+[`demo/shared-todo/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo):
 
-- [`index.html`](demo/shared-todo/index.html): cấu trúc trang và accessibility contract.
-- [`app.js`](demo/shared-todo/app.js): điều khiển form, filter và thao tác hoàn thành task.
-- [`task-list.mjs`](demo/shared-todo/task-list.mjs): lifecycle task và filter thuần.
-- [`tests/`](demo/shared-todo/tests/): kiểm thử lifecycle cùng page contract.
+- [`index.html`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/index.html): cấu trúc trang và accessibility contract.
+- [`app.js`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/app.js): điều khiển form, filter và thao tác hoàn thành task.
+- [`task-list.mjs`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/task-list.mjs): lifecycle task và filter thuần.
+- [`tests/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo/tests): kiểm thử lifecycle cùng page contract.
 
 Web này là **artifact minh họa**, không phải bằng chứng một model giỏi hơn hay
 thay cho evaluation. Nó cho người đọc cùng ngữ cảnh sản phẩm với hai procedure
 được kiểm tra ở dưới.
 
-![Hình 2 — Shared Todo List local demo](assets/article/02-shared-todo.png)
+![Hình 2 — Shared Todo List local demo](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/02-shared-todo.png)
 
 *Hình 2 — Shared Todo List chạy local. Ảnh cho thấy form tạo task, bộ lọc
 `All / Active / Done`, task đã hoàn thành và số lượng task còn active.*
 
 Tôi dùng cùng prompt tương ứng, cùng fixture và rubric cho cả hai agent. Bài
-requirement dùng [fixture `fixtures/requirements-request.md`](fixtures/requirements-request.md)
+requirement dùng [fixture `fixtures/requirements-request.md`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/fixtures/requirements-request.md)
 trong cùng bối cảnh Shared Todo List: thành viên workspace tạo task, giao task
 và đánh dấu hoàn thành. Quyền sửa/xóa task của người khác, deadline/timezone,
 recurring task, retention/reopen, thông báo và concurrent edit đều cố ý để
@@ -80,7 +83,7 @@ trống. Bài code review dùng fixture authorization độc lập, có lỗi r�
 tách fixture nhỏ khỏi web UI giúp rubric đo được đúng một failure scenario,
 thay vì lẫn với chất lượng thiết kế giao diện.
 
-![Hình 3 — Fixture requirement definition](assets/article/03-requirements-fixture.png)
+![Hình 3 — Fixture requirement definition](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/03-requirements-fixture.png)
 
 *Hình 3 — Fixture Shared Todo List được mở trong IDE. Yêu cầu chỉ nêu outcome
 cơ bản; quyền sửa/xóa, deadline/timezone, retention, notification và concurrent
@@ -89,7 +92,7 @@ edit vẫn cố ý để trống.*
 Rubric không đòi văn phong giống nhau. Nó chỉ hỏi những thứ quan sát được: brief
 có scope/câu hỏi/assumption/acceptance criteria không; review có nhận ra lỗi,
 priority, `file:line` và phạm vi đã kiểm tra không. Toàn bộ fixture, rubric và
-transcript có trong [báo cáo kiểm thử](reports/eval-2026-11-21-shared-todo/RESULTS.md).
+transcript có trong [báo cáo kiểm thử](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/eval-2026-11-21-shared-todo/RESULTS.md).
 
 ### Demo requirement definition trên hai CLI
 
@@ -100,18 +103,18 @@ cùng output contract của Skill hay không.
 
 #### Claude Code
 
-![Hình 4a — Claude Code chạy requirement definition](assets/article/04a-claude-requirements.png)
+![Hình 4a — Claude Code chạy requirement definition](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04a-claude-requirements.png)
 
 *Hình 4a — Claude Code nạp `requirements-and-review`, đọc fixture và tạo brief
-Shared Todo List theo output contract. [Xem toàn bộ kết quả trong video](assets/article/04a-claude-requirements.mp4),
+Shared Todo List theo output contract. [Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04a-claude-requirements.mp4),
 vì output cần cuộn mới xem hết.*
 
 #### Codex
 
-![Hình 4b — Codex chạy requirement definition](assets/article/04b-codex-requirements.png)
+![Hình 4b — Codex chạy requirement definition](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04b-codex-requirements.png)
 
 *Hình 4b — Codex nhận cùng prompt, đọc `requirements-and-review` và tạo brief
-cho Shared Todo List. [Xem toàn bộ kết quả trong video](assets/article/04b-codex-requirements.mp4),
+cho Shared Todo List. [Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/04b-codex-requirements.mp4),
 bao gồm các phần `Outcome`, `Open questions`, `Assumptions` và
 `Acceptance criteria` khi output được cuộn.*
 
@@ -124,7 +127,7 @@ priority và phạm vi đã kiểm tra.
 
 #### Claude Code
 
-![Hình 5a — Claude Code chạy code review](assets/article/05a-claude-code-review.png)
+![Hình 5a — Claude Code chạy code review](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/05a-claude-code-review.png)
 
 *Hình 5a — Claude Code nạp `requirements-and-review`, báo `P1` về mutation
 trước authorization ở `task-service.js:6`, rồi liệt kê các failure path chưa có
@@ -132,7 +135,7 @@ test và review coverage.*
 
 #### Codex
 
-![Hình 5b — Codex chạy code review](assets/article/05b-codex-code-review.png)
+![Hình 5b — Codex chạy code review](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/05b-codex-code-review.png)
 
 *Hình 5b — Codex báo `P1` tại `task-service.js:6`: task bị đổi trước khi kiểm
 tra workspace membership, nên request bị từ chối vẫn có thể để lại thay đổi
@@ -142,7 +145,7 @@ trong object. Output cũng công bố review coverage và testing gap.*
 
 Skill đầu tiên chỉ có 64 dòng nên phù hợp để kiểm tra portable core, nhưng chưa
 đủ để minh họa một workflow review đầy đủ hơn. Vì thế repository có thêm
-[`agent-skills/code-review-v2/`](agent-skills/code-review-v2/): một Skill gồm
+[`agent-skills/code-review-v2/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/agent-skills/code-review-v2): một Skill gồm
 167 dòng hướng dẫn và hai reference đi kèm.
 
 Gói này cho thấy một Skill không chỉ là một prompt ngắn. Nó làm ba việc:
@@ -161,7 +164,7 @@ Các giả định chỉ phù hợp với một repository đã được tổng 
 
 Trong fixture authorization-order bug, hai lần chạy ghi lại đều đạt **6/6**
 theo rubric: review envelope, severity structure, file/line, nhận ra mutation
-trước workspace authorization, impact và scope disclosure. [Báo cáo port/eval](reports/code-review-v2-eval-2026-11-21-shared-todo/RESULTS.md)
+trước workspace authorization, impact và scope disclosure. [Báo cáo port/eval](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/code-review-v2-eval-2026-11-21-shared-todo/RESULTS.md)
 cung cấp transcript, rubric và cách chạy lại.
 
 ### Demo `code-review-v2` trên Claude Code và Codex
@@ -171,19 +174,19 @@ contract đòi thêm severity structure, `Summary` và `Review coverage`.
 
 #### Claude Code
 
-![Hình 6a — Claude Code chạy code-review-v2](assets/article/06a-claude-code-review-v2.png)
+![Hình 6a — Claude Code chạy code-review-v2](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/06a-claude-code-review-v2.png)
 
 *Hình 6a — Claude Code nạp `code-review-v2`, đặt status Blocked, phân severity
-và đề xuất đưa authorization lên trước mutation. [Xem toàn bộ kết quả trong video](assets/article/06a-claude-code-review-v2.mp4),
+và đề xuất đưa authorization lên trước mutation. [Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/06a-claude-code-review-v2.mp4),
 vì phần review dài cần cuộn.*
 
 #### Codex
 
-![Hình 6b — Codex chạy code-review-v2](assets/article/06b-codex-code-review-v2.png)
+![Hình 6b — Codex chạy code-review-v2](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/06b-codex-code-review-v2.png)
 
 *Hình 6b — Codex chạy `code-review-v2` với cấu trúc severity Critical/High/
 Medium/Low, finding ở `task-service.js:6`, `Summary` và `Review coverage`.
-[Xem toàn bộ kết quả trong video](assets/article/06b-codex-code-review-v2.mp4),
+[Xem toàn bộ kết quả trong video](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/06b-codex-code-review-v2.mp4),
 vì phần review dài cần cuộn.*
 
 Đây là một lượt chạy có gọi Skill tường minh trên mỗi CLI, nên không phải bằng
