@@ -25,8 +25,7 @@ Toàn bộ artifact, source code, fixture, transcript và media của bài có t
 
 ## Thí nghiệm: một workflow, hai nhiệm vụ
 
-Artifact gốc nằm tại
-[`agent-skills/requirements-and-review/SKILL.md`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
+Artifact gốc là [file `SKILL.md` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
 Nó dùng **chỉ** hai trường chuẩn `name` và `description`, không dùng
 frontmatter riêng của Claude Code hoặc Codex. Skill có hai mode:
 
@@ -56,13 +55,12 @@ hoàn thành và lọc `All / Active / Done`. Đây là tương tác chạy th�
 duyệt, nhưng **không** có backend, login, persistence hay dữ liệu thật; giao
 diện tự ghi rõ đó là local demo.
 
-Mã nguồn của web demo nằm tại
-[`demo/shared-todo/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo):
+Mã nguồn web demo có tại [GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo):
 
-- [`index.html`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/index.html): cấu trúc trang và accessibility contract.
-- [`app.js`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/app.js): điều khiển form, filter và thao tác hoàn thành task.
-- [`task-list.mjs`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/task-list.mjs): lifecycle task và filter thuần.
-- [`tests/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo/tests): kiểm thử lifecycle cùng page contract.
+- [`index.html` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/index.html): cấu trúc trang và accessibility contract.
+- [`app.js` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/app.js): điều khiển form, filter và thao tác hoàn thành task.
+- [`task-list.mjs` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/demo/shared-todo/task-list.mjs): lifecycle task và filter thuần.
+- [Tests trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo/tests): kiểm thử lifecycle cùng page contract.
 
 Web này là **artifact minh họa**, không phải bằng chứng một model giỏi hơn hay
 thay cho evaluation. Nó cho người đọc cùng ngữ cảnh sản phẩm với hai procedure
@@ -74,7 +72,7 @@ thay cho evaluation. Nó cho người đọc cùng ngữ cảnh sản phẩm v�
 `All / Active / Done`, task đã hoàn thành và số lượng task còn active.*
 
 Tôi dùng cùng prompt tương ứng, cùng fixture và rubric cho cả hai agent. Bài
-requirement dùng [fixture `fixtures/requirements-request.md`](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/fixtures/requirements-request.md)
+requirement dùng [fixture Shared Todo List trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/fixtures/requirements-request.md)
 trong cùng bối cảnh Shared Todo List: thành viên workspace tạo task, giao task
 và đánh dấu hoàn thành. Quyền sửa/xóa task của người khác, deadline/timezone,
 recurring task, retention/reopen, thông báo và concurrent edit đều cố ý để
@@ -145,7 +143,7 @@ trong object. Output cũng công bố review coverage và testing gap.*
 
 Skill đầu tiên chỉ có 64 dòng nên phù hợp để kiểm tra portable core, nhưng chưa
 đủ để minh họa một workflow review đầy đủ hơn. Vì thế repository có thêm
-[`agent-skills/code-review-v2/`](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/agent-skills/code-review-v2): một Skill gồm
+[source `code-review-v2` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/agent-skills/code-review-v2): một Skill gồm
 167 dòng hướng dẫn và hai reference đi kèm.
 
 Gói này cho thấy một Skill không chỉ là một prompt ngắn. Nó làm ba việc:
