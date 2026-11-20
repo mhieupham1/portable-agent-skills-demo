@@ -1,0 +1,7 @@
+PASS review envelope
+PASS severity structure
+PASS precise location
+PASS write-before-authorization defect
+PASS impact
+PASS scope disclosure
+TOTAL 6/6

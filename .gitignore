@@ -1,0 +1,16 @@
+.DS_Store
+
+# Local workflow state and authoring notes
+.superpowers/
+docs/superpowers/
+
+# Raw troubleshooting output is not part of the public evaluation evidence.
+reports/claude-*.log
+reports/claude-*.stdout
+reports/claude-*.stderr
+reports/*-repro.*
+reports/codex-repro.md
+
+# Superseded Data Export evaluation; the article links to the current Todo List run.
+reports/eval-2026-11-20/
+reports/code-review-v2-eval-2026-11-20/

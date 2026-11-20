@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A local browser demo for a shared workspace todo list."
+    />
+    <title>Tasks · Aurora Studio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="Aurora Studio tasks">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span>Aurora Studio</span>
+        </a>
+        <span class="member-chip">Member · Mai Nguyen</span>
+      </header>
+
+      <section class="intro" id="top" aria-labelledby="page-title">
+        <p class="eyebrow">Workspace</p>
+        <h1 id="page-title">Shared tasks</h1>
+        <p class="lead">
+          A focused task list for the team’s work this week.
+        </p>
+      </section>
+
+      <aside class="demo-notice" aria-label="Local demo notice">
+        <span class="notice-mark" aria-hidden="true">i</span>
+        <p>
+          <strong>Local demo.</strong> Tasks live only in this browser tab. It illustrates an
+          interface, not production sign-in, workspace permissions, or storage.
+        </p>
+      </aside>
+
+      <section class="workspace-grid" aria-label="Create and track shared tasks">
+        <article class="panel form-panel" aria-labelledby="new-task-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">New task</p>
+              <h2 id="new-task-title">Add to the team list</h2>
+            </div>
+          </div>
+
+          <form id="new-task-form" class="task-form">
+            <label for="task-title">What needs to be done?</label>
+            <input id="task-title" name="title" type="text" autocomplete="off" required />
+
+            <div class="field-pair">
+              <div>
+                <label for="task-assignee">Assignee</label>
+                <select id="task-assignee" name="assignee">
+                  <option>Mai Nguyen</option>
+                  <option>Minh Tran</option>
+                  <option>Unassigned</option>
+                </select>
+              </div>
+              <div>
+                <label for="task-due-date">Due date</label>
+                <input id="task-due-date" name="dueDate" type="date" />
+              </div>
+            </div>
+
+            <button class="button button-primary" type="submit">Add task</button>
+            <p class="form-message" id="form-message" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="panel summary-panel" aria-labelledby="summary-title">
+          <p class="eyebrow">This week</p>
+          <h2 id="summary-title">Keep momentum visible</h2>
+          <p class="summary-number" id="task-count" aria-live="polite">0 active tasks</p>
+          <p class="summary-copy">
+            Use the filters to focus on what is still moving or what the team has completed.
+          </p>
+          <div class="team-stack" aria-label="People in this demo workspace">
+            <span>MN</span><span>MT</span><span aria-hidden="true">+</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel tasks-panel" aria-labelledby="tasks-title">
+        <div class="tasks-heading">
+          <div>
+            <p class="eyebrow">Task board</p>
+            <h2 id="tasks-title">What the team is working on</h2>
+          </div>
+          <div class="filter-group" aria-label="Filter tasks">
+            <button class="filter-button" data-filter="all" type="button" aria-pressed="true">All</button>
+            <button class="filter-button" data-filter="active" type="button" aria-pressed="false">Active</button>
+            <button class="filter-button" data-filter="done" type="button" aria-pressed="false">Done</button>
+          </div>
+        </div>
+        <ul class="task-list" id="task-list"></ul>
+        <p class="empty-state" id="empty-state" hidden>No tasks match this filter yet.</p>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
