@@ -23,6 +23,12 @@ frontmatter trên giấy.
 Toàn bộ artifact, source code, fixture, transcript và media của bài có tại
 [repository GitHub public](https://github.com/mhieupham1/portable-agent-skills-demo).
 
+Bài viết trả lời ba câu hỏi cụ thể:
+
+- Một `SKILL.md` chỉ dùng phần chuẩn có chạy được trên cả Claude Code và Codex không?
+- Procedure cho requirement definition và code review có tái sử dụng được không?
+- Chuẩn hóa này hữu ích thế nào trong công việc hằng ngày, và giới hạn của nó là gì?
+
 ## Thí nghiệm: một workflow, hai nhiệm vụ
 
 Artifact gốc là [file `SKILL.md` trên GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/agent-skills/requirements-and-review/SKILL.md).
@@ -45,7 +51,11 @@ Do vị trí cài đặt mỗi CLI khác nhau, cùng payload được đặt ở
 `.claude/skills/requirements-and-review/` cho Claude Code và
 `.agents/skills/requirements-and-review/` cho Codex. Ba file có cùng SHA-256:
 `f0ec6011fdcd0a160e3420902e0902fd4bcd44b56331e628874ea01251f1648e`.
-Nói cách khác, **portable là nội dung Skill; adapter chỉ là đường dẫn cài đặt**.
+
+Từ setup này có hai điểm cần phân biệt:
+
+- **Portable** là nội dung Skill: cùng frontmatter, hướng dẫn và output contract.
+- **Adapter** chỉ là đường dẫn cài đặt native của từng CLI.
 
 ## Tình huống demo: Shared Todo List
 
@@ -54,6 +64,13 @@ demo local để các thành viên workspace tạo task, giao cho một người
 hoàn thành và lọc `All / Active / Done`. Đây là tương tác chạy thật trong trình
 duyệt, nhưng **không** có backend, login, persistence hay dữ liệu thật; giao
 diện tự ghi rõ đó là local demo.
+
+Phạm vi của demo được giữ cố ý nhỏ:
+
+- Có: tạo task, chọn assignee, chọn due date, đánh dấu hoàn thành và lọc task.
+- Không có: backend, login, persistence hay dữ liệu thật.
+- Vai trò: tạo một ngữ cảnh sản phẩm cụ thể cho hai procedure được kiểm tra; không
+  phải benchmark chất lượng model.
 
 Mã nguồn web demo có tại [GitHub](https://github.com/mhieupham1/portable-agent-skills-demo/tree/main/demo/shared-todo):
 
@@ -81,6 +98,13 @@ trống. Bài code review dùng fixture authorization độc lập, có lỗi r�
 tách fixture nhỏ khỏi web UI giúp rubric đo được đúng một failure scenario,
 thay vì lẫn với chất lượng thiết kế giao diện.
 
+Hai fixture phục vụ hai câu hỏi khác nhau:
+
+- **Requirement definition**: agent có biến yêu cầu còn mơ hồ thành một brief
+  có thể quyết định và triển khai không?
+- **Code review**: agent có nhận ra mutation xảy ra trước authorization, nêu
+  đúng vị trí và giải thích impact không?
+
 ![Hình 3 — Fixture requirement definition](https://raw.githubusercontent.com/mhieupham1/portable-agent-skills-demo/main/assets/article/03-requirements-fixture.png)
 
 *Hình 3 — Fixture Shared Todo List được mở trong IDE. Yêu cầu chỉ nêu outcome
@@ -91,6 +115,12 @@ Rubric không đòi văn phong giống nhau. Nó chỉ hỏi những thứ quan 
 có scope/câu hỏi/assumption/acceptance criteria không; review có nhận ra lỗi,
 priority, `file:line` và phạm vi đã kiểm tra không. Toàn bộ fixture, rubric và
 transcript có trong [báo cáo kiểm thử](https://github.com/mhieupham1/portable-agent-skills-demo/blob/main/reports/eval-2026-11-21-shared-todo/RESULTS.md).
+
+Để phép thử công bằng, cả hai CLI cùng nhận:
+
+- Cùng Skill payload và cùng prompt theo từng tác vụ.
+- Cùng fixture và rubric chấm theo điều kiện quan sát được.
+- Chế độ chỉ đọc; không được sửa file fixture hay code demo.
 
 ### Demo requirement definition trên hai CLI
 
@@ -205,6 +235,9 @@ Mỗi platform nhận cùng prompt, cùng fixture và chạy ở chế độ ch�
 phải phép so sánh năng lực tuyệt đối giữa hai model: chỉ một lần chạy mỗi tác vụ
 không đủ để kết luận về độ ổn định, chi phí hay độ chính xác trên codebase thật.
 
+Vì vậy, kết quả dưới đây chỉ chứng minh **khả năng tái sử dụng procedure trên
+case đã kiểm tra**, không chứng minh hai model có năng lực tương đương.
+
 ## Kết quả cho portable core: procedure tái dùng được; kết quả không tự động đồng nhất
 
 | Nền tảng | Requirement definition | Code review | Kết quả |
@@ -212,58 +245,61 @@ không đủ để kết luận về độ ổn định, chi phí hay độ chí
 | Codex CLI 0.171.0 | 4/4 | 4/4 | Pass, tổng 8/8 |
 | Claude Code 2.1.329 | 4/4 | 4/4 | Pass, tổng 8/8 |
 
-Ở Codex, agent đã thực sự đọc `SKILL.md`, tạo brief với các heading được yêu
-cầu, hỏi đúng các quyết định material như quyền sửa/xóa, deadline, retention,
-notification và concurrent edit. Ở bài review, nó báo `P1` tại
-`task-service.js:6`: user ngoài workspace vẫn làm đổi object trước khi code ném
-`forbidden`. Đây là chính xác failure scenario mà fixture được thiết kế để kiểm
-tra.
+Kết quả quan sát được:
 
-Với Claude Code, agent tạo đủ brief yêu cầu và tìm đúng lỗi mutation trước
-workspace authorization tại dòng 6; nó còn chỉ ra các điểm validation và test
-coverage chưa có.
-
-Kết luận chính xác là: **cùng một artifact và procedure đã chạy thành công trên
-cả Claude Code lẫn Codex trong hai tác vụ đã kiểm tra.** Nhưng đây vẫn là smoke
-evaluation một lần mỗi tác vụ, không phải chứng minh rằng hai model luôn có chất
-lượng, tốc độ hay tool behavior giống nhau.
+- **Codex** đã đọc `SKILL.md`, tạo brief với các heading yêu cầu và nêu các
+  quyết định material: quyền sửa/xóa, deadline, retention, notification và
+  concurrent edit. Ở review, Codex báo `P1` tại `task-service.js:6`: user ngoài
+  workspace vẫn có thể làm đổi object trước khi code ném `forbidden`.
+- **Claude Code** tạo đủ brief yêu cầu, tìm đúng mutation trước workspace
+  authorization tại dòng 6, đồng thời nêu validation và test coverage còn thiếu.
+- **Kết luận**: cùng artifact và procedure đã chạy thành công trên cả Claude
+  Code lẫn Codex trong hai tác vụ đã kiểm tra. Đây vẫn chỉ là smoke evaluation
+  một lần mỗi tác vụ, không phải bằng chứng rằng hai model luôn có chất lượng,
+  tốc độ hay tool behavior giống nhau.
 
 ## Tôi nghĩ gì về chuẩn hóa Agent Skills?
 
-Tôi ủng hộ chuẩn hóa phần nhỏ và bền: cấu trúc thư mục, frontmatter tối thiểu,
-tài nguyên đi kèm và progressive disclosure. Đây là “lớp giao thức” đủ đơn giản
-để di chuyển quy trình giữa công cụ mà không buộc mọi nhà cung cấp phải chia sẻ
-cùng UX hay tool API. Việc Anthropic chuyển giao Agent Skills cho Agentic AI
-Foundation là một tín hiệu tích cực cho hướng vendor-neutral này. [Thông báo của Anthropic](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation)
+Quan điểm của tôi là:
 
-Tuy nhiên, chuẩn càng cố mô tả execution policy càng dễ trở nên mong manh. Ví
-dụ, `disable-model-invocation`, dynamic context hay cấu hình subagent là extension
-hữu ích của một platform, nhưng không nên nằm trong “portable core”. Một Skill
-dùng chung nên giữ body trung lập: outcome, bằng chứng cần xem, điều kiện dừng
-và format đầu ra. Những gì phụ thuộc CLI, quyền truy cập, hook hoặc model nên
-được đặt trong adapter của từng nền tảng hoặc tài liệu triển khai riêng.
+- Nên chuẩn hóa phần nhỏ và bền: cấu trúc thư mục, frontmatter tối thiểu, tài
+  nguyên đi kèm và progressive disclosure. Đây là “lớp giao thức” đủ đơn giản
+  để mang quy trình sang công cụ khác mà không bắt mọi vendor dùng cùng UX hay
+  tool API. Việc Anthropic chuyển giao Agent Skills cho Agentic AI Foundation là
+  tín hiệu tích cực cho hướng vendor-neutral này. [Thông báo của Anthropic](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation)
+- Không nên nhét execution policy vào portable core. Ví dụ,
+  `disable-model-invocation`, dynamic context hay cấu hình subagent là extension
+  hữu ích của một platform nhưng dễ làm Skill kém di động.
+- Một Skill dùng chung nên giữ body trung lập: outcome, bằng chứng cần xem,
+  điều kiện dừng và format đầu ra. Phần phụ thuộc CLI, quyền, hook hoặc model
+  nên ở adapter của từng nền tảng hay tài liệu triển khai riêng.
 
 Nói ngắn gọn: standardization nên làm cho **quy trình** di chuyển được, không
-hứa hẹn rằng **chất lượng quyết định** của các agent sẽ bằng nhau.
+hứa hẹn **chất lượng quyết định** của các agent sẽ bằng nhau.
 
 ## Tôi sẽ dùng nó thế nào trong công việc hằng ngày?
 
-Tôi sẽ bắt đầu với những công việc lặp lại, đắt vì dễ quên bước hơn là đắt vì
-thiếu kiến thức: triage bug, chuẩn bị requirement trước khi code, code review,
-release checklist, viết changelog và kiểm tra tài liệu sau thay đổi API.
+Tôi sẽ ưu tiên những công việc lặp lại, đắt vì dễ quên bước hơn là đắt vì thiếu
+kiến thức: triage bug, chuẩn bị requirement trước khi code, code review, release
+checklist, viết changelog và kiểm tra tài liệu sau thay đổi API.
 
-Với requirement, Skill buộc tôi và agent làm rõ phần nào là fact, phần nào là
-assumption, rồi biến mong muốn mơ hồ thành acceptance criteria có thể test. Điều
-này giảm vòng “xong rồi mới phát hiện product chưa quyết quyền/retention”. Với
-review, format priority + `file:line` + failure scenario tránh review kiểu “có
-vẻ không ổn”; tác giả có thể tái hiện và quyết định sửa nhanh hơn.
+Cách tôi áp dụng hằng ngày:
 
-Quy trình thực tế của tôi sẽ là: lưu portable core cùng repository, cài cùng
-payload vào thư mục native của agent đang dùng, và có một fixture/rubric nhỏ
-như bài này trước mỗi thay đổi lớn của Skill. Tôi sẽ version Skill như code,
-đo pass rate và false positive theo từng workflow. Khi chuyển từ Codex sang
-Claude Code hoặc Copilot, tôi mang theo procedure, acceptance contract và eval;
-tôi không mang theo giả định rằng một agent khác sẽ cho đúng cùng câu trả lời.
+1. **Trước khi code**: dùng Skill requirement để tách fact khỏi assumption và
+   biến mong muốn mơ hồ thành acceptance criteria có thể test. Việc này giảm
+   vòng “xong rồi mới phát hiện product chưa quyết quyền hoặc retention”.
+2. **Khi review**: buộc output có priority, `file:line` và failure scenario,
+   thay cho nhận xét “có vẻ không ổn”. Tác giả có thể tái hiện rồi quyết định
+   sửa nhanh hơn.
+3. **Khi duy trì Skill**: lưu portable core cùng repository, cài cùng payload
+   vào thư mục native của agent đang dùng và giữ một fixture/rubric nhỏ trước
+   mỗi thay đổi lớn.
+4. **Khi đổi công cụ**: mang theo procedure, acceptance contract và eval từ
+   Codex sang Claude Code hoặc Copilot; không giả định agent khác sẽ tự cho ra
+   cùng câu trả lời.
+
+Tôi sẽ version Skill như code và theo dõi pass rate cùng false positive cho
+từng workflow.
 
 Đó mới là lợi ích bền vững nhất của Agent Skills: biến kinh nghiệm vận hành tốt
 thành tài sản kiểm thử được, thay vì một đoạn prompt sống trong lịch sử chat của
